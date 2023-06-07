@@ -26,7 +26,7 @@ export default function Signup() {
         setSuccessMessage('Signed up successfully');
         setErrorMessage('');
         setTimeout(() => {
-          nav('/signin');
+          nav('/signin'); 
         }, 3000);
        })
       })

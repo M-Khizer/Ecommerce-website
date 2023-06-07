@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
-import { signInWithEmailAndPassword,onAuthStateChanged,signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword,signOut } from 'firebase/auth';
 import Navbars from './Navbar';
 import {auth} from '../Config/config'
 import { useNavigate } from 'react-router-dom';
@@ -15,9 +15,7 @@ export default function Signin() {
       
     const handleSubmit = (e) => {
       e.preventDefault();
-      signInWithEmailAndPassword(auth,loginEmail,loginPassword).then(userCred=>{
-        console.log(userCred)
-      })
+      signInWithEmailAndPassword(auth,loginEmail,loginPassword)
       .then(()=>{
         setSuccessMessage('Signed up successfully');
         setErrorMessage('');
