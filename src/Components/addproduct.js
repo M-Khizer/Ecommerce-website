@@ -18,8 +18,8 @@ export default function Addproduct() {
   const [productError,setProductError]=useState('');
   const [successMsg,setSuccessMsg]=useState('');
   
-  const productId = useSelector(state=>state.products.products.id);
-  console.log(productId) 
+  const productId = useSelector(state=>state.products.id)
+  console.log(productId)
 
   const dispatch = useDispatch();
   
@@ -47,7 +47,7 @@ export default function Addproduct() {
 
         getDownloadURL(ref(storage,imageName)).then(url=>{
 
-            let product = {title,description,price:Number(price),url,productId}
+            let product = {title,description,price:Number(price),url}
 
             dispatch(addProducts(product))
             .then(()=>{

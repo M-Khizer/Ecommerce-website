@@ -1,15 +1,40 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { signOut } from 'firebase/auth'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 import {auth} from '../Config/config'
 import{Icon} from 'react-icons-kit';
 import {shoppingCart} from 'react-icons-kit/feather/shoppingCart'
+import {menu} from 'react-icons-kit/feather/menu'
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserId,getName } from '../features/userSlice';
+import { doc,getDoc } from 'firebase/firestore';
+import { fs } from '../Config/config';
+import image from '../Images/logo.png'
 
 export default function Navbars() {
   
+  const dispatch=useDispatch();
   const fullName = useSelector(state=> state.user.fullName)
+  const uid = useSelector(state=> state.user.uid);
+  const cartItem = useSelector(state=> state.cart.cart);
+  const [isOpen,setIsOpen] = useState(false);
+
+  const toggleMenu = ()=>{
+    setIsOpen(!isOpen);
+  }
+
+  useEffect(()=>{
+    onAuthStateChanged(auth,user=>{
+
+      dispatch(getUserId(user.uid))
+      
+      const docRef= doc(fs,'users',user.uid)
+      getDoc(docRef).then(snapshot=>{
+        dispatch(getName(snapshot.data().fullName))
+      })
+    })
+  },[uid])
 
   const nav = useNavigate()
   // console.log(user)
@@ -18,79 +43,125 @@ export default function Navbars() {
     signOut(auth).then(()=>{
       nav('/signin')
     })
-  }
-
- 
+  } 
 
  return (
-    <nav className="navbar navbar-expand navbar-light bg-primary">
-      <div className="container">
-        <Link className="navbar-brand" to="/">
-          My Store
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
+//     <nav className="navbar navbar-expand navbar-light bg-primary">
+//       <div className="container-fluid">
+//         <Link className="navbar-brand" to="/">
+//           My Store
+//         </Link>
 
-{!fullName && (
+//         <div className="collapse navbar-collapse" id="navbarNav">
+//           <ul className="navbar-nav ms-auto">
+
+// {!uid && (
+
+//   <>
+    
+//   <li>
+//     <Link to= "/signin">
+//       Signin
+//     </Link>
+//   </li>
+
+//   <li>
+//     <Link to="/signup">
+//       Signup
+//     </Link>
+//   </li>
+
+//   </>)}
+
+//   {uid && (
+//     <>
+    
+//       <li>
+//         <Link to="#">{fullName}</Link>
+//       </li>
+
+//       <li><Link to="/addproducts">Add Products</Link></li>
+
+//       <li>
+//         <Link to="/cart">
+//           <Icon icon={shoppingCart} size={20} />
+//           <sup className='products-indicator'>{cartItem.length}</sup>
+//         </Link>
+//       </li>
+//       <li>
+//         <Link to="#" onClick={handleSignOut}>Signout</Link>
+//       </li>
+
+
+     
+//     </>
+//   )}            
+            
+           
+//           </ul>
+//         </div>
+//       </div>
+//     </nav>
+
+  <header>
+      <Link className='logo' to='/'>
+        <img src={image} alt='logo'/> 
+      </Link>
+      <div className='navigation'>
+        
+        <div className='toggle-menu' onClick={toggleMenu}>
+          <Icon icon={menu} size={30} className='ham'/>
+        </div>
+
+      <ul className={isOpen ? 'menu' : 'not-visible'}>
+
+      {!uid && (
 
   <>
     
-  <li className="nav-item">
-    <Link className="nav-link" to= "/signin">
+  <li>
+    <Link to= "/signin" className='link'>
       Signin
     </Link>
   </li>
 
-  <li className="nav-item">
-    <Link className="nav-link" to="/signup">
+  <li>
+    <Link to="/signup" className='link'>
       Signup
     </Link>
   </li>
 
   </>)}
 
-  {fullName && (
+  {uid && (
     <>
-    
-    {/* <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li> */}
 
-      <li className="nav-item">
-        <Link className="nav-link" to="#">{fullName}</Link>
+      <li>
+        <Link to="#" className='link'>{fullName} </Link>
       </li>
 
-      <li className="nav-item"><Link className="nav-link" to="/addproducts">Add Products</Link></li>
+      <li><Link to="/addproducts" className='link'>Add Products</Link></li>
 
-      <li className="nav-item">
-        <Link className="nav-link" to="#">
-          <Icon icon={shoppingCart} size={20}/>
+      <li>
+        <Link to="/cart">
+          <Icon icon={shoppingCart} size={20} className='link '/>
+          <sup className='products-indicator'>{cartItem.length}</sup>
         </Link>
       </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="#" onClick={handleSignOut}>Signout</Link>
+
+      <li>
+        <Link to="#" onClick={handleSignOut} className='action-btns'>Signout</Link>
       </li>
-
-
      
     </>
-  )}            
-            
-           
-          </ul>
-        </div>
-      </div>
-    </nav>
+  )}  
     
+      </ul>
+
+      
+      </div>
+      
+  </header>
   )
 }
  

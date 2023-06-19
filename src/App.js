@@ -10,6 +10,7 @@ import { createBrowserRouter,
 import Error404 from "./Components/404error";
 import Signout from "./Components/Signout";
 import Addproduct from "./Components/addproduct";
+import Cart from "./Components/Cart";
 
 
 const Root = ()=>{
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/signout" element={<Signout/>} />
       <Route path="/addproducts" element={<Addproduct/>} />
+      <Route path="/cart" element={<Cart/>} />
 
       <Route element={<Error404/>} />
     </Route>

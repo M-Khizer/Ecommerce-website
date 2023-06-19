@@ -5,8 +5,9 @@ import { fs } from "../Config/config";
 export const addProducts= createAsyncThunk('products/addProducts',async (product)=>{
 
     const productsRef = await addDoc(collection(fs,'products'),product)
-    const productId = productsRef.id;
-    let newProduct = {id:productId,product}
+    console.log(productsRef.id)
+    // const productId = productsRef.id;
+    let newProduct = {product}
     return newProduct;
 
 });
@@ -16,7 +17,8 @@ export const getProducts = createAsyncThunk('products/getProducts',async ()=>{
     console.log(productsRef)
 
     const products = productsRef.docs.map(data=>({
-        product:data.data()
+        product:data.data(),
+        id:data.id
     }))
     return products
 })
@@ -40,16 +42,15 @@ export const productsSlice = createSlice({
     extraReducers: builder =>{
         builder
             .addCase(addProducts.fulfilled,(state,action)=>{
-                state.products=action.payload;
+                state.products=action.payload.product;
+                state.id= action.payload.id
             })
 
             .addCase(getProducts.pending,state=>{
                 state.status='loading'
             })
             .addCase(getProducts.fulfilled,(state,action)=>{
-                // const productArray= [];
                state.products=action.payload; 
-            //    state.id=action.payload.id;
                state.status='idle'  
             })
     }
