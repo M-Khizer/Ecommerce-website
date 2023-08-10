@@ -46,67 +46,12 @@ export default function Navbars() {
   } 
 
  return (
-//     <nav className="navbar navbar-expand navbar-light bg-primary">
-//       <div className="container-fluid">
-//         <Link className="navbar-brand" to="/">
-//           My Store
-//         </Link>
-
-//         <div className="collapse navbar-collapse" id="navbarNav">
-//           <ul className="navbar-nav ms-auto">
-
-// {!uid && (
-
-//   <>
-    
-//   <li>
-//     <Link to= "/signin">
-//       Signin
-//     </Link>
-//   </li>
-
-//   <li>
-//     <Link to="/signup">
-//       Signup
-//     </Link>
-//   </li>
-
-//   </>)}
-
-//   {uid && (
-//     <>
-    
-//       <li>
-//         <Link to="#">{fullName}</Link>
-//       </li>
-
-//       <li><Link to="/addproducts">Add Products</Link></li>
-
-//       <li>
-//         <Link to="/cart">
-//           <Icon icon={shoppingCart} size={20} />
-//           <sup className='products-indicator'>{cartItem.length}</sup>
-//         </Link>
-//       </li>
-//       <li>
-//         <Link to="#" onClick={handleSignOut}>Signout</Link>
-//       </li>
-
-
-     
-//     </>
-//   )}            
-            
-           
-//           </ul>
-//         </div>
-//       </div>
-//     </nav>
 
   <header>
       <Link className='logo' to='/'>
         <img src={image} alt='logo'/> 
       </Link>
+      
       <div className='navigation'>
         
         <div className='toggle-menu' onClick={toggleMenu}>
